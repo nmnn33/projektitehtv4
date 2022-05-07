@@ -23,8 +23,12 @@ Kun olet syöttänyt oikean ID:n, paina "Submit" nappulaa, ja sovellus tuo esiin
 
 6. "Hae Kaikki" nappula tuo esiin 20 ensimmäistä kappeletta mongoDb kokoelmastani ja niiden kaikki tiedot.
 
-7. "Lisää" nappi (tulossa myöhemmin)
+7. "Lisää" nappi lisää yhden käyttäjän kokoelmaan hakukentistä syötettyjen tietojen avulla. username jää antamatta, sillä sitä ei ollut alkuperäisessä backendissä.
 
-8. "Päivitä" nappi (tulossa myöhemmin)
+8. "Päivitä" nappi muuttaa ID:n perusteella nimen Junior:ksi.
 
-9. "Poista" nappi (tulossa myöhemmin)
+9. "Poista" nappi poistaa ID:n perusteella kappaleen kokoelmasta, eli tietokannasta katoaa yksi tietue.
+
+Minun muistiin panoni:
+Miten Rest APi toimii React
+https://stackoverflow.com/questions/40284338/javascript-fetch-delete-and-put-requests
