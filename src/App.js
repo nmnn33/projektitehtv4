@@ -1,6 +1,9 @@
 import { useState } from "react";
 
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Table from 'react-bootstrap/Table';
+import Alert from 'react-bootstrap/Alert';
 
 function App() {
 
@@ -8,14 +11,20 @@ function App() {
   const [tulos, setTulos] = useState([]);
   const [ilmoitus, setIlmoitus] = useState('');
 
+  const [show, setShow] = useState(false);
+  const [alerttiShow, setAlerttiShow] = useState(false);
+
 
   //Kun submit tehdään
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (kysely === "") {
+    if (kysely === "" || kysely.length !== 24) {  //24 kirjaiminen ID
       console.log("Error, ei löydy hakusanaa");
-
+      document.getElementById('kysely').style.borderColor = "red";
+      setShow(true);
     } else {
+      document.getElementById('kysely').style.borderColor = "";
+      setShow(false);
       console.log("Tapahtuman käynnisti: ", e.target);
       console.log("Hakusana: ", kysely);
       asiakasHaku(kysely);
@@ -25,6 +34,8 @@ function App() {
   //Kun Haetaan kaikki asiakkaat
   const handleClick = (e) => {
     e.preventDefault();
+    setShow(false);
+    document.getElementById('kysely').style.borderColor = "";
     console.log("Tapahtuman käynnisti: ", e.target)
     asiakasKaikki();
   }
@@ -55,10 +66,13 @@ function App() {
   //Kun tehdään PUT tyyppinen REST pyyntö, eli update
   const paivita = (e) => {
     e.preventDefault();
-    if (kysely === "") {
+    if (kysely === "" || kysely.length !== 24) {
       console.log("Error, ei löydy hakusanaa");
-
+      document.getElementById('kysely').style.borderColor = "red";
+      setShow(true);
     } else {
+      document.getElementById('kysely').style.borderColor = "";
+      setShow(false);
       console.log("Tapahtuman käynnisti: ", e.target);
       console.log("Hakusana: ", kysely);
       junior(kysely);
@@ -83,8 +97,13 @@ function App() {
   //Kun tehdään POST tyyppinen REST pyyntö, eli add
   const add = (e) => {
     e.preventDefault();
-    console.log("Tapahtuman käynnisti: ", e.target)
-    addUser();
+    if (document.getElementById("nimi").value.length < 3 || document.getElementById("osoite").value.length < 4 || document.getElementById("email").value.length < 6) {
+      setAlerttiShow(true);
+    } else {
+      setAlerttiShow(false);
+      console.log("Tapahtuman käynnisti: ", e.target)
+      addUser();
+    }
   };
 
   //Kun tehdään POST tyyppinen REST pyyntö, eli add osa2
@@ -115,10 +134,13 @@ function App() {
   //Kun tehdään DELETE tyyppinen REST pyyntö, eli delete
   const poista = (e) => {
     e.preventDefault();
-    if (kysely === "") {
+    if (kysely === "" || kysely.length !== 24) {
       console.log("Error, ei löydy hakusanaa");
-
+      document.getElementById('kysely').style.borderColor = "red";
+      setShow(true);
     } else {
+      document.getElementById('kysely').style.borderColor = "";
+      setShow(false);
       console.log("Tapahtuman käynnisti: ", e.target);
       console.log("Hakusana: ", kysely);
       poistaYksi(kysely);
@@ -145,8 +167,8 @@ function App() {
   const AsiakasLista = (props) => {
     const { data } = props;
     return (
-      <div>
-        <table className="asiakasTaulu">
+      <div className="container asiaKasTauluDiv">
+        <Table striped bordered hover>
           <thead>
             <tr key={props.id}>
               <th scope="col">username</th>
@@ -166,7 +188,8 @@ function App() {
               </tr>
             ))}
           </tbody>
-        </table>
+
+        </Table>
       </div>
     )
   };
@@ -174,16 +197,51 @@ function App() {
   //PUT ja DELETE tyyppisille pyynnöile ilmoitus
   const Ilmoitus = (props) => {
     return (
-      <div>
-        <h3>{props.data}</h3>
+      <div className="container ilmoitusDiv border border-primary">
+        <h2>Viesti backend serveriltämme: </h2>
+        <div className="container ilmoitusDivAla">
+          <h3>{props.data}</h3>
+        </div>
       </div>
     )
   };
 
+  //Alert kun hae osio tarkastetaan virheellinen
+  function Alertti() {
+
+    if (show) {
+      return (
+        <Alert variant="danger" onClose={() => setShow(false)} dismissible>
+          <Alert.Heading>Virhe haussa!</Alert.Heading>
+          <p>
+            ID on 24 merkkiä pitkä, tarkista uudestaan ID.
+          </p>
+        </Alert>
+      );
+    }
+    return null;
+  }
+
+  //Alert lisätään asiakas virheellinen
+  function AlerttiLisaa() {
+
+    if (alerttiShow) {
+      return (
+        <Alert variant="danger" onClose={() => setAlerttiShow(false)} dismissible>
+          <Alert.Heading>Hakijaa lisättäessä!</Alert.Heading>
+          <p>
+            Nimi täytyy olla vähintään 4 merkkiä, osoite 5 ja email 7.
+          </p>
+        </Alert>
+      );
+    }
+    return null;
+  }
+
   //JSX muotoinen palaute, joka on tulee root-div sisälle
   return (
     <div>
-      <div className="paadiv">
+      <div className="container paadiv">
         <h1>Käyttäjien mongoDb hallinta työkalu: the frontend edicion</h1>
         <form onSubmit={handleSubmit}>
           <div className="lomake">
@@ -192,7 +250,8 @@ function App() {
               type="search"
               value={kysely}
               onChange={(event) => setKysely(event.target.value)}
-              name="kysely">
+              name="kysely"
+              id="kysely">
             </input>
           </div>
           <div className="napit">
@@ -202,6 +261,7 @@ function App() {
             <button type="button" className="haeBtn" onClick={poista}>Poista</button>
           </div>
         </form>
+        <Alertti />
         <br></br>
         <form>
           <div className="lomakeLisaa">
@@ -233,9 +293,11 @@ function App() {
             <button type="button" classname="haeBtn" onClick={add}>Lisää käyttäjä</button>
           </div>
         </form>
+        <AlerttiLisaa />
         <br></br>
       </div>
       <AsiakasLista data={tulos} />
+      <br></br><br></br>
       <Ilmoitus data={ilmoitus} />
     </div>
   );

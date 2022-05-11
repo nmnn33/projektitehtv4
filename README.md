@@ -2,6 +2,8 @@ React sovellus, joka toimii Frontend:nä projektitehtävä 3:lle, joka löytyy r
 
 Tämä sovellus luo paikallisen serverin ja saa kaiken mongoDB logiikkansa projektitehtava 3:sta. SIKSI ET VOI TEHDÄ TÄTÄ SOVELLUSTA OMASSA PAIKALLISELLA LAITTEELLASI, joudut lisäämään itse oman mongoDB käyttäjän- ja kokoelman tiedot.
 
+React bootstrap on käytetty hyväksi tässä sovelluksessa.
+
 <strong>Miten etenene tämän sovelluksen kanssa:</strong>
 
 1. Cloonaa https://github.com/nmnn33/Projektitehtava3 ja käynnistä se npm start- komennolla. (Voi olla, että joudut npm install- komentoa käyttämään saadaksesi kaikki riippuvuudet).
